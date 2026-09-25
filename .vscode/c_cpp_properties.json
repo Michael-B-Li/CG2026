@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "compilerPath": "/usr/bin/clang++",
+            "intelliSenseMode": "macos-clang-arm64",
+            "cppStandard": "c++11",
+            "includePath": [
+                "${workspaceFolder}/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src",
+                "${workspaceFolder}/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw",
+                "${workspaceFolder}/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2",
+                "/opt/local/include/SDL2"
+            ],
+            "defines": ["_THREAD_SAFE"]
+        }
+    ],
+    "version": 4
+}

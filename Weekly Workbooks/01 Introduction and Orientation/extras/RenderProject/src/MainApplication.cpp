@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "RedNoiseRenderer.h"
+#include "BlueNoiseRenderer.h"
 #include "ColourSpectrumRenderer.h"
 #include <fstream>
 #include <vector>
@@ -10,7 +11,9 @@ extern const int HEIGHT = 240;
 
 DrawingWindow window = DrawingWindow(WIDTH, HEIGHT);
 RedNoiseRenderer redNoise = RedNoiseRenderer();
-Renderer* currentRenderer = &redNoise;
+BlueNoiseRenderer blueNoise = BlueNoiseRenderer();
+Renderer* currentRenderer = &blueNoise;
+//Renderer* currentRenderer = &redNoise;
 bool savingFrames = false;
 int frameCounter = 0;
 
