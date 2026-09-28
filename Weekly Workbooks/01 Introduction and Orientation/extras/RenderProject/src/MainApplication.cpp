@@ -3,6 +3,7 @@
 #include "BlueNoiseRenderer.h"
 #include "ColourSpectrumRenderer.h"
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 // Define globals for WIDTH and HEIGHT of the window (can be accessed from any renderer)
@@ -12,7 +13,8 @@ extern const int HEIGHT = 240;
 DrawingWindow window = DrawingWindow(WIDTH, HEIGHT);
 RedNoiseRenderer redNoise = RedNoiseRenderer();
 BlueNoiseRenderer blueNoise = BlueNoiseRenderer();
-Renderer* currentRenderer = &blueNoise;
+ColourSpectrumRenderer colourSpectrum = ColourSpectrumRenderer();
+Renderer* currentRenderer = &colourSpectrum;
 //Renderer* currentRenderer = &redNoise;
 bool savingFrames = false;
 int frameCounter = 0;
@@ -38,6 +40,14 @@ void handleEvent(SDL_Event event, DrawingWindow &window) {
 }
 
 int main(int argc, char *argv[]) {
+	// test the interpolateSingleFloats function
+	/*
+	std::vector<float> result;
+	result = interpolateSingleFloats(2.2, 8.5, 7);
+	for(size_t i=0; i<result.size(); i++) std::cout << result[i] << " ";
+	std::cout << std::endl;
+	*/
+
 	SDL_Event event;
 	while (true) {
 		// We MUST poll for events - otherwise the window will freeze !
