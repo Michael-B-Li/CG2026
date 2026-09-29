@@ -2,13 +2,23 @@
 
 void ColourSpectrumRenderer::draw(DrawingWindow &window) {
    window.clearPixels();
-   // interpolates one brightness value per column, white to black
-   std::vector<float> gradientRow = interpolateSingleFloats(255.0f, 0.0f, window.width);
+   glm::vec3 topLeft(255, 0, 0);       // red
+   glm::vec3 topRight(0, 0, 255);      // blue
+   glm::vec3 bottomRight(0, 255, 0);   // green
+   glm::vec3 bottomLeft(255, 255, 0);  // yellow
+
+   // interpolate down the left and right edges of the window
+   std::vector<glm::vec3> leftColumn = interpolateThreeElementValues(topLeft, bottomLeft, window.height);
+   std::vector<glm::vec3> rightColumn = interpolateThreeElementValues(topRight, bottomRight, window.height);
+
    for (size_t y = 0; y < window.height; y++) {
+      // interpolate across this row between its two edge colours
+      std::vector<glm::vec3> gradientRow = interpolateThreeElementValues(leftColumn[y], rightColumn[y], window.width);
       for (size_t x = 0; x < window.width; x++) {
-         int grey = int(gradientRow[x]);
-         // equal rgb give greyscale with alpha 255 makes it fully opaque
-         uint32_t colour = (255 << 24) + (grey << 16) + (grey << 8) + grey;
+         float red = gradientRow[x].x;
+         float green = gradientRow[x].y;
+         float blue = gradientRow[x].z;
+         uint32_t colour = (255 << 24) + (int(red) << 16) + (int(green) << 8) + int(blue);
          window.setPixelColour(x, y, colour);
       }
    }
