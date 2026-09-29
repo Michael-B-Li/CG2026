@@ -48,6 +48,15 @@ int main(int argc, char *argv[]) {
 	std::cout << std::endl;
 	*/
 
+	// test the interpolateThreeElementsValues function
+	/*
+	glm::vec3 from(1.0f, 4.0f, 9.2f);
+	glm::vec3 to(4.0f, 1.0f, 9.8f);
+	std::vector<glm::vec3> values = interpolateThreeElementValues(from, to, 4);
+	for (const glm::vec3 &value : values) {
+		std::cout << "(" << value.x << ", " << value.y << ", " << value.z << ")" << std::endl;
+	}
+	*/
 	SDL_Event event;
 	while (true) {
 		// We MUST poll for events - otherwise the window will freeze !

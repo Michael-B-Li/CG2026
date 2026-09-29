@@ -27,3 +27,17 @@ std::vector<float> interpolateSingleFloats(float from, float to, int numberOfVal
    }
    return values;
 }
+
+// this function interpolates 3 values compared to the above which does a single value
+std::vector<glm::vec3> interpolateThreeElementValues(glm::vec3 from, glm::vec3 to, int numberOfValues){
+   if (numberOfValues <= 0) return {};
+   if (numberOfValues == 1) return {from};
+
+   std::vector<glm::vec3> values(numberOfValues);
+   glm::vec3 step = (to - from) / static_cast<float>(numberOfValues - 1);   
+
+   for (int i = 0; i < numberOfValues; i++) {
+      values[i] = from + (static_cast<float>(i)*step);
+   }
+   return values;
+}
