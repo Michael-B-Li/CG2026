@@ -2,7 +2,16 @@
 
 void ColourSpectrumRenderer::draw(DrawingWindow &window) {
    window.clearPixels();
-   // Write some drawing code in here !
+   // interpolates one brightness value per column, white to black
+   std::vector<float> gradientRow = interpolateSingleFloats(255.0f, 0.0f, window.width);
+   for (size_t y = 0; y < window.height; y++) {
+      for (size_t x = 0; x < window.width; x++) {
+         int grey = int(gradientRow[x]);
+         // equal rgb give greyscale with alpha 255 makes it fully opaque
+         uint32_t colour = (255 << 24) + (grey << 16) + (grey << 8) + grey;
+         window.setPixelColour(x, y, colour);
+      }
+   }
 }
 
 std::vector<float> interpolateSingleFloats(float from, float to, int numberOfValues) {
