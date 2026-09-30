@@ -1,24 +1,31 @@
 #include "ColourSpectrumRenderer.h"
+#include <cmath>
 
 void ColourSpectrumRenderer::draw(DrawingWindow &window) {
    window.clearPixels();
-   glm::vec3 topLeft(255, 0, 0);       // red
-   glm::vec3 topRight(0, 0, 255);      // blue
-   glm::vec3 bottomRight(0, 255, 0);   // green
-   glm::vec3 bottomLeft(255, 255, 0);  // yellow
 
-   // interpolate down the left and right edges of the window
-   std::vector<glm::vec3> leftColumn = interpolateThreeElementValues(topLeft, bottomLeft, window.height);
-   std::vector<glm::vec3> rightColumn = interpolateThreeElementValues(topRight, bottomRight, window.height);
+   // set up triangle
+   const glm::vec2 v0(0, window.height - 1);                 // red bottom left
+   const glm::vec2 v1(window.width / 2, 0);                  // green top centre
+   const glm::vec2 v2(window.width - 1, window.height - 1);  // blue bottom right
+   const glm::vec3 red(255, 0, 0);
+   const glm::vec3 green(0, 255, 0);
+   const glm::vec3 blue(0, 0, 255);
 
    for (size_t y = 0; y < window.height; y++) {
-      // interpolate across this row between its two edge colours
-      std::vector<glm::vec3> gradientRow = interpolateThreeElementValues(leftColumn[y], rightColumn[y], window.width);
-      for (size_t x = 0; x < window.width; x++) {
-         float red = gradientRow[x].x;
-         float green = gradientRow[x].y;
-         float blue = gradientRow[x].z;
-         uint32_t colour = (255 << 24) + (int(red) << 16) + (int(green) << 8) + int(blue);
+      // calculate how far down triangle we are
+      float t = static_cast<float>(y) / (window.height - 1);
+      // find boundary for this row
+      float leftX = v1.x + t * (v0.x - v1.x);
+      float rightX = v1.x + t * (v2.x - v1.x);
+      // round to draw strictly inside triangle
+      int startX = static_cast<int>(std::ceil(leftX));
+      int endX = static_cast<int>(std::floor(rightX));
+
+      for (int x = startX; x <= endX; x++) {
+         glm::vec3 weights = convertToBarycentricCoordinates(v0, v1, v2, glm::vec2(x, y)); // find distance to each of the 3 corners
+         glm::vec3 rgb = weights.z * red + weights.x * green + weights.y * blue; // mix rgb colours based on distance
+         uint32_t colour = (255 << 24) + (int(rgb.r) << 16) + (int(rgb.g) << 8) + int(rgb.b);
          window.setPixelColour(x, y, colour);
       }
    }
