@@ -14,18 +14,18 @@ void ColourSpectrumRenderer::draw(DrawingWindow &window) {
 
    for (size_t y = 0; y < window.height; y++) {
       // calculate how far down triangle we are
-      float t = static_cast<float>(y) / (window.height - 1);
+      const float progress = static_cast<float>(y) / (window.height - 1);
       // find boundary for this row
-      float leftX = v1.x + t * (v0.x - v1.x);
-      float rightX = v1.x + t * (v2.x - v1.x);
+      const float leftX = v1.x + progress * (v0.x - v1.x);
+      const float rightX = v1.x + progress * (v2.x - v1.x);
       // round to draw strictly inside triangle
-      int startX = static_cast<int>(std::ceil(leftX));
-      int endX = static_cast<int>(std::floor(rightX));
+      const int startX = static_cast<int>(std::ceil(leftX));
+      const int endX = static_cast<int>(std::floor(rightX));
 
       for (int x = startX; x <= endX; x++) {
-         glm::vec3 weights = convertToBarycentricCoordinates(v0, v1, v2, glm::vec2(x, y)); // find distance to each of the 3 corners
-         glm::vec3 rgb = weights.z * red + weights.x * green + weights.y * blue; // mix rgb colours based on distance
-         uint32_t colour = (255 << 24) + (int(rgb.r) << 16) + (int(rgb.g) << 8) + int(rgb.b);
+         const glm::vec3 weights = convertToBarycentricCoordinates(v0, v1, v2, glm::vec2(x, y)); // find distance to each of the 3 corners
+         const glm::vec3 rgb = weights.z * red + weights.x * green + weights.y * blue; // mix rgb colours based on distance
+         const uint32_t colour = (255 << 24) + (int(rgb.r) << 16) + (int(rgb.g) << 8) + int(rgb.b);
          window.setPixelColour(x, y, colour);
       }
    }
@@ -37,7 +37,7 @@ std::vector<float> interpolateSingleFloats(float from, float to, int numberOfVal
 
    std::vector<float> values(numberOfValues);
     // difference between each pair of neighbouring values. n values n-1 intervals
-   float step = (to - from) / (numberOfValues - 1);
+   const float step = (to - from) / (numberOfValues - 1);
 
    for (int i = 0; i < numberOfValues; i++) {
       values[i] = from + (i*step); // fill vector by adding increasing multiple of step to starting value
@@ -51,7 +51,7 @@ std::vector<glm::vec3> interpolateThreeElementValues(glm::vec3 from, glm::vec3 t
    if (numberOfValues == 1) return {from};
 
    std::vector<glm::vec3> values(numberOfValues);
-   glm::vec3 step = (to - from) / static_cast<float>(numberOfValues - 1);   
+   const glm::vec3 step = (to - from) / static_cast<float>(numberOfValues - 1);   
 
    for (int i = 0; i < numberOfValues; i++) {
       values[i] = from + (static_cast<float>(i)*step);
