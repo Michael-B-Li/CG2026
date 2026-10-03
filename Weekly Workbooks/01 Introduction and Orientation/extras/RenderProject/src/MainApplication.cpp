@@ -2,6 +2,7 @@
 #include "RedNoiseRenderer.h"
 #include "BlueNoiseRenderer.h"
 #include "ColourSpectrumRenderer.h"
+#include "RasterisedRenderer.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -14,7 +15,8 @@ DrawingWindow window = DrawingWindow(WIDTH, HEIGHT);
 RedNoiseRenderer redNoise = RedNoiseRenderer();
 BlueNoiseRenderer blueNoise = BlueNoiseRenderer();
 ColourSpectrumRenderer colourSpectrum = ColourSpectrumRenderer();
-Renderer* currentRenderer = &colourSpectrum;
+RasterisedRenderer rasterised = RasterisedRenderer();
+Renderer* currentRenderer = &rasterised;
 //Renderer* currentRenderer = &redNoise;
 bool savingFrames = false;
 int frameCounter = 0;
